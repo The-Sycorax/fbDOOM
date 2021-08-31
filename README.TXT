@@ -11,8 +11,10 @@ Runs on:
 
 To build (example):
 * cd fbdoom
-* make CROSS_COMPILE=arm-linux-gnueabihf-
+* make
 
+For this fork, The source code of i_input_tty.c has been edited so that fbDOOM can be 
+played on the ACN IRIS 3000.
 
 Original readme
 ===============
