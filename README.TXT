@@ -8,6 +8,7 @@ Runs on:
 * Plain desktop Linux framebuffer,
 * Siglent SSA 3021X Spectrum Analyzer,
 * Frosted OS
+* ACN IRIS 3000
 
 To build (example):
 * cd fbdoom
