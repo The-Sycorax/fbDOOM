@@ -57,20 +57,20 @@ static int shiftdown = 0;
 static const char at_to_doom[] =
 {
     /* 0x00 */ 0x00,
-    /* 0x01 */ KEY_ESCAPE,
+    /* 0x01 */ 0x0,
     /* 0x02 */ '1',
-    /* 0x03 */ '2',
-    /* 0x04 */ '3',
-    /* 0x05 */ '4',
-    /* 0x06 */ '5',
-    /* 0x07 */ '6',
+    /* 0x03 */ KEY_UPARROW,
+    /* 0x04 */ 0x0,
+    /* 0x05 */ KEY_RIGHTARROW,
+    /* 0x06 */ KEY_DOWNARROW,
+    /* 0x07 */ KEY_LEFTARROW,
     /* 0x08 */ '7',
     /* 0x09 */ '8',
     /* 0x0a */ '9',
     /* 0x0b */ '0',
     /* 0x0c */ '-',
     /* 0x0d */ '=',
-    /* 0x0e */ KEY_BACKSPACE,
+    /* 0x0e */ 0x0,
     /* 0x0f */ KEY_TAB,
     /* 0x10 */ 'q',
     /* 0x11 */ 'w',
@@ -84,8 +84,8 @@ static const char at_to_doom[] =
     /* 0x19 */ 'p',
     /* 0x1a */ '[',
     /* 0x1b */ ']',
-    /* 0x1c */ KEY_ENTER,
-    /* 0x1d */ KEY_FIRE, /* KEY_RCTRL, */
+    /* 0x1c */ KEY_USE,
+    /* 0x1d */ 0x0, /* KEY_RCTRL, */
     /* 0x1e */ 'a',
     /* 0x1f */ 's',
     /* 0x20 */ 'd',
@@ -98,7 +98,7 @@ static const char at_to_doom[] =
     /* 0x27 */ ';',
     /* 0x28 */ '\'',
     /* 0x29 */ '`',
-    /* 0x2a */ KEY_RSHIFT,
+    /* 0x2a */ 0x0,
     /* 0x2b */ '\\',
     /* 0x2c */ 'z',
     /* 0x2d */ 'x',
@@ -110,15 +110,15 @@ static const char at_to_doom[] =
     /* 0x33 */ ',',
     /* 0x34 */ '.',
     /* 0x35 */ '/',
-    /* 0x36 */ KEY_RSHIFT,
+    /* 0x36 */ 0x0,
     /* 0x37 */ KEYP_MULTIPLY,
-    /* 0x38 */ KEY_LALT,
-    /* 0x39 */ KEY_USE,
+    /* 0x38 */ 0x0,
+    /* 0x39 */ 0x0,
     /* 0x3a */ KEY_CAPSLOCK,
-    /* 0x3b */ KEY_F1,
-    /* 0x3c */ KEY_F2,
+    /* 0x3b */ KEY_LALT,
+    /* 0x3c */ KEY_ESCAPE,
     /* 0x3d */ KEY_F3,
-    /* 0x3e */ KEY_F4,
+    /* 0x3e */ KEY_UPARROW,
     /* 0x3f */ KEY_F5,
     /* 0x40 */ KEY_F6,
     /* 0x41 */ KEY_F7,
@@ -131,13 +131,13 @@ static const char at_to_doom[] =
     /* 0x48 */ 0x0, /* 48 (Keypad-8/Up) */
     /* 0x49 */ 0x0, /* 49 (Keypad-9/PgUp) */
     /* 0x4a */ 0x0, /* 4a (Keypad--) */
-    /* 0x4b */ 0x0, /* 4b (Keypad-4/Left) */
-    /* 0x4c */ 0x0, /* 4c (Keypad-5) */
+    /* 0x4b */ KEY_RIGHTARROW, /* 4b (Keypad-4/Left) */
+    /* 0x4c */ KEY_LEFTARROW, /* 4c (Keypad-5) */
     /* 0x4d */ 0x0, /* 4d (Keypad-6/Right) */
     /* 0x4e */ 0x0, /* 4e (Keypad-+) */
-    /* 0x4f */ 0x0, /* 4f (Keypad-1/End) */
+    /* 0x4f */ KEY_RSHIFT, /* 4f (Keypad-1/End) */
     /* 0x50 */ 0x0, /* 50 (Keypad-2/Down) */
-    /* 0x51 */ 0x0, /* 51 (Keypad-3/PgDn) */
+    /* 0x51 */ KEY_FIRE, /* 51 (Keypad-3/PgDn) */
     /* 0x52 */ 0x0, /* 52 (Keypad-0/Ins) */
     /* 0x53 */ 0x0, /* 53 (Keypad-./Del) */
     /* 0x54 */ 0x0, /* 54 (Alt-SysRq) on a 84+ key keyboard */
@@ -158,13 +158,13 @@ static const char at_to_doom[] =
     /* 0x63 */ 0x0,
     /* 0x64 */ 0x0,
     /* 0x65 */ 0x0,
-    /* 0x66 */ 0x0,
-    /* 0x67 */ KEY_UPARROW,
+    /* 0x66 */ KEY_DOWNARROW,
+    /* 0x67 */ KEY_BACKSPACE,
     /* 0x68 */ 0x0,
-    /* 0x69 */ KEY_LEFTARROW,
-    /* 0x6a */ KEY_RIGHTARROW,
+    /* 0x69 */ 0x0,
+    /* 0x6a */ KEY_ENTER,
     /* 0x6b */ 0x0,
-    /* 0x6c */ KEY_DOWNARROW,
+    /* 0x6c */ 0x0,
     /* 0x6d */ 0x0,
     /* 0x6e */ 0x0,
     /* 0x6f */ 0x0,
@@ -183,7 +183,7 @@ static const char at_to_doom[] =
     /* 0x7c */ 0x0,
     /* 0x7d */ 0x0,
     /* 0x7e */ 0x0,
-    /* 0x7f */ KEY_FIRE, //KEY_RCTRL,
+    /* 0x7f */ 0x0, //KEY_RCTRL,
 };
 
 // Lookup table for mapping ASCII characters to their equivalent when
@@ -277,7 +277,7 @@ void kbd_shutdown(void)
 static int kbd_init(void)
 {
     struct termios new_term;
-    char *files_to_try[] = {"/dev/tty", "/dev/console", NULL};
+    char *files_to_try[] = {"/dev/tty1", "/dev/console", NULL};
     int i;
     int flags;
 
